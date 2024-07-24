@@ -5,11 +5,18 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrainingSolidPrinciples.SRP;
+namespace TrainingSolidPrinciples.SRP.Solution;
 public class Invoice
 {
     public long InvoiceAmount { get; set; }
     public DateTime InvoiceDate { get; set; }
+
+    private readonly ILogger _logger;
+
+    public Invoice(ILogger logger)
+    {
+        _logger = logger;
+    }
 
     public void Add(Invoice invoice)
     {
@@ -27,7 +34,7 @@ public class Invoice
         }
         catch (Exception ex)
         {
-            System.IO.File.WriteAllText(@"C:\Temp\ErrorLog.txt", ex.ToString());
+            _logger.Error(ex.ToString());
         }
     }
 
@@ -39,8 +46,7 @@ public class Invoice
         }
         catch (Exception ex)
         {
-            //Error Logging
-            System.IO.File.WriteAllText(@"C:\Temp\ErrorLog.txt", ex.ToString());
+            _logger.Error(ex.ToString());
         }
     }
 
@@ -52,8 +58,7 @@ public class Invoice
         }
         catch (Exception ex)
         {
-            //Error Logging
-            System.IO.File.WriteAllText(@"C:\Temp\ErrorLog.txt", ex.ToString());
+            _logger.Error(ex.ToString());
             return string.Empty;
         }
     }
