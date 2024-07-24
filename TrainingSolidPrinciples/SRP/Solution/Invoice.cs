@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 
 namespace TrainingSolidPrinciples.SRP.Solution;
 public class Invoice
@@ -12,10 +7,14 @@ public class Invoice
     public DateTime InvoiceDate { get; set; }
 
     private readonly ILogger _logger;
+    private readonly IEmailSender _emailSender;
 
-    public Invoice(ILogger logger)
+    public Invoice(
+        ILogger logger,
+        IEmailSender emailSender)
     {
         _logger = logger;
+        _emailSender = emailSender;
     }
 
     public void Add(Invoice invoice)
@@ -30,7 +29,7 @@ public class Invoice
                 "hello@iamarpit.net",
                 "Test Subject",
                 "Test Email Body");
-            SendInvoiceEmail(mailMessage);
+            _emailSender.SendEmail(mailMessage);
         }
         catch (Exception ex)
         {
@@ -47,19 +46,6 @@ public class Invoice
         catch (Exception ex)
         {
             _logger.Error(ex.ToString());
-        }
-    }
-
-    public string SendInvoiceEmail(MailMessage mailMessage)
-    {
-        try
-        {
-            return "Email has been sent.";
-        }
-        catch (Exception ex)
-        {
-            _logger.Error(ex.ToString());
-            return string.Empty;
         }
     }
 }
